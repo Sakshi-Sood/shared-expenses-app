@@ -302,17 +302,131 @@ Create temporary participant or request review.
 
 # Database Schema Overview
 
-Tables:
+# Database Schema
 
-- Users
-- Groups
-- Memberships
-- Expenses
-- ExpenseParticipants
-- Settlements
-- ImportJobs
-- Anomalies
+## Users
 
-Detailed schema documented in DECISIONS.md.
+Stores application users.
+
+| Field         | Type      |
+| ------------- | --------- |
+| id            | UUID      |
+| name          | String    |
+| email         | String    |
+| password_hash | String    |
+| created_at    | Timestamp |
 
 ---
+
+## Groups
+
+Stores expense groups.
+
+| Field      | Type      |
+| ---------- | --------- |
+| id         | UUID      |
+| name       | String    |
+| created_at | Timestamp |
+
+---
+
+## Memberships
+
+Tracks group membership history.
+
+| Field     | Type            |
+| --------- | --------------- |
+| id        | UUID            |
+| group_id  | FK              |
+| user_id   | FK              |
+| joined_at | Date            |
+| left_at   | Date (nullable) |
+
+---
+
+## Expenses
+
+Stores spending records.
+
+| Field            | Type      |
+| ---------------- | --------- |
+| id               | UUID      |
+| group_id         | FK        |
+| description      | String    |
+| amount           | Decimal   |
+| currency         | String    |
+| converted_amount | Decimal   |
+| expense_date     | Date      |
+| paid_by          | FK        |
+| split_type       | Enum      |
+| created_at       | Timestamp |
+
+Supported split types:
+
+- equal
+- exact
+- percentage
+- share
+
+---
+
+## ExpenseParticipants
+
+Stores participant-specific split information.
+
+| Field        | Type               |
+| ------------ | ------------------ |
+| id           | UUID               |
+| expense_id   | FK                 |
+| user_id      | FK                 |
+| exact_amount | Decimal (nullable) |
+| percentage   | Decimal (nullable) |
+| share_weight | Integer (nullable) |
+
+---
+
+## Settlements
+
+Stores debt repayments.
+
+| Field           | Type    |
+| --------------- | ------- |
+| id              | UUID    |
+| group_id        | FK      |
+| payer_id        | FK      |
+| receiver_id     | FK      |
+| amount          | Decimal |
+| currency        | String  |
+| settlement_date | Date    |
+
+---
+
+## ImportJobs
+
+Stores CSV import sessions.
+
+| Field        | Type      |
+| ------------ | --------- |
+| id           | UUID      |
+| filename     | String    |
+| status       | String    |
+| uploaded_at  | Timestamp |
+| completed_at | Timestamp |
+
+---
+
+## Anomalies
+
+Stores all issues detected during import.
+
+| Field            | Type      |
+| ---------------- | --------- |
+| id               | UUID      |
+| import_job_id    | FK        |
+| row_number       | Integer   |
+| anomaly_type     | String    |
+| severity         | String    |
+| description      | Text      |
+| suggested_action | Text      |
+| user_decision    | String    |
+| resolved_at      | Timestamp |
