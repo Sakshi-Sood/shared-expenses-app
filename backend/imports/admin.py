@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import ImportJob, Anomaly
 
-# Register your models here.
+admin.site.register(ImportJob)
+admin.site.register(Anomaly)
