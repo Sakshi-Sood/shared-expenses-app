@@ -1,6 +1,6 @@
 import csv
 
-from imports.models import ImportJob
+from imports.models import ImportJob, Anomaly
 
 
 class CSVImportService:

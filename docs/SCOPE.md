@@ -310,7 +310,7 @@ Stores application users.
 
 | Field         | Type      |
 | ------------- | --------- |
-| id            | UUID      |
+| id            | Integer   |
 | name          | String    |
 | email         | String    |
 | password_hash | String    |
